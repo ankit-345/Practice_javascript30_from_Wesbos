@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Shadow</title>
+</head>
+<body>
+
+  <div class="hero">
+    <h1 contenteditable>🔥WOAH!</h1>
+  </div>
+
+  <style>
+  html {
+    color: black;
+    font-family: sans-serif;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+
+  h1 {
+    text-shadow: 10px 10px 0 rgba(0,0,0,1);
+    font-size: 100px;
+  }
+  </style>
+
+<script>
+  const hero = document.querySelector('.hero');
+  const text = document.querySelector('h1');
+  let walk = 400;  // so that the shadow move minmum.
+
+  function shadow(e){
+    // same as const width = hero.offsetWidth;
+    const {offsetWidth: width, offsetHeight: height} = hero;   
+    let {offsetX: x, offsetY: y} = e;
+
+
+    
+    // this is done so that it gives equal (x, y) even when we hover over the box.
+    // this will always give the 'hero element'. and e.target will give the 'text element' when we hover over the text.
+    // if they are not equal, then update the x and y. 
+    if(this !== e.target){
+      x = x + e.offsetLeft;   // e.offsetLeft will give distance from the left.
+      y = y + e.offsetTop;    // e.offsetTop will give the distance from the top.
+    } 
+    
+    
+
+    // this is done ==> if we move maximum of 100 units
+    // ===> then the shadow should move from -50 units to 50 units.
+    // ===> this is done so that we move from -50 to +50, instead of 0 to 100.
+    let xWalk = Math.round((x / width * walk) - (walk/2));
+    let yWalk = Math.round((y / height * walk) - (walk/2));
+
+
+    text.style.textShadow = `${xWalk}px ${yWalk}px 0px red,
+                            ${xWalk * -1}px ${yWalk}px 0px blue,
+                            ${xWalk}px ${yWalk * -1}px 0px green
+                          `;
+  }
+
+  hero.addEventListener('mousemove', shadow);
+
+</script>
+</body>
+</html>

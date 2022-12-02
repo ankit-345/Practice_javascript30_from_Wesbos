@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+const canvas = document.querySelector('#draw');
+const ctx = canvas.getContext('2d');          // returns a drawing context on a canvas.
+canvas.width = window.innerWidth;             // will set the width of the canvas to the window width;
+canvas.height = window.innerHeight;           // will set the height of the canvas to the window height
+ctx.strokeStyle = '#BADASS';                  // specifies the color, gradient or pattern to use for the strokes(outline) around shapes.
+ctx.lineJoin = 'round';                       // sets and gets the 'corner' that is created when two line meets
+ctx.lineCap = 'round';
+ctx.lineWidth = 30;
+
+
+let isDrawing = false;                        // It is flag so that we know when the mouse is clicked downward and when upward
+let lastX = 0;                                
+let lastY = 0;                                // Both will tell us where to start
+let hue = 0;                                  // To increase the color;
+let direction = true;
+
+function draw(e){
+  if(!isDrawing) return;                      // stop the fn from running when they are not mouse down
+   console.log(e);
+
+  ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`
+  ctx.beginPath();                             // starts a new path
+  ctx.moveTo(lastX, lastY);                   // starts from (0,0) i.e. specifie above
+  ctx.lineTo(e.offsetX, e.offsetY);           // goto where the mouse is moving
+  ctx.stroke();                               // it used to draw the path from lastX, lastY to the offsetX, offsetYs
+  [lastX, lastY] = [e.offsetX, e.offsetY];     // updating the variables so that it does not start from the begining but from the last endpoint.
+  hue++;
+
+  if(hue >= 360){
+    hue = 0;
+  }
+
+  if(ctx.lineWidth >= 50 || ctx.lineWidth <= 1){    // It will change the direction of lineWidth increase and decreasing like a toggle button
+    direction = !direction;
+  }
+
+  if(direction){
+    ctx.lineWidth++;
+  }
+  else{
+    ctx.lineWidth--;
+  }
+}
+
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mousedown', (e) => {     // You can draw
+   isDrawing = true;
+   [lastX, lastY] = [e.offsetX, e.offsetY];       
+});        
+
+
+canvas.addEventListener('mouseup', () => isDrawing = false);         // You cannot draw
+canvas.addEventListener('mouseout', () => isDrawing = false);         // You cannot draw since you are out of canvas(range)
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+</body>
+</html>

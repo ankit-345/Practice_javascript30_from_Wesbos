@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  
+  *, *:before, *:after { 
+    box-sizing: inherit; 
+  }
+
+  div {
+    width: 100%;
+    padding: 100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background: mistyrose;
+  }
+
+  .three {
+    background: coral;
+  }
+</style>
+
+<button></button>
+<script>
+    const divs = document.querySelectorAll('div');
+
+    function logText(e){
+      /* 
+       Now, when we click on the coral(third) div, the 2nd and 1st div's class value was also printed
+       because the 3rd div is just above the 2nd div and 1st div
+       In reality, when we are clicking the 3rd div, then we are also clicking the 2nd div, 1st div and body also.
+       This method is called bubbling.
+      */
+      console.log(this.classList.value);
+
+      /*
+       1) It will start from the lowest div(three) since capture is false
+       2) then when it encounters e.stopPropagation(), then it will stop propagating and will not move further.
+      */
+      e.stopPropagation();
+    } 
+     
+    // capture: true => on clicking, it will run the function from up to down i.e. 1st div -> 2nd div -> 3rd div
+    // default value is false
+
+
+    // once: true => it allow to click only once and then it will unbind itself, so there is not future clicks
+    divs.forEach(div => div.addEventListener('click', logText, {
+      capture: false,
+      once: true
+    }));
+</script>
+</body>
+</html>

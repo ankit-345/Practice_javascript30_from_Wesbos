@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+  const pressed = [];
+  const secretcode = 'wesbos';
+
+  window.addEventListener('keyup', (e) =>{
+    console.log(e.key);
+    pressed.push(e.key);
+    // -secretcode.length-1 will go up to the 7th letter and from there it will do the slicing. 
+    // that means it will only contain 6 character (size of secretcode)
+    pressed.splice(-secretcode.length-1, pressed.length - secretcode.length);
+    
+    if(pressed.join('').includes(secretcode)){
+      console.log("ding ding ding");
+      cornify.add();
+    }
+    console.log(pressed);
+  })
+
+</script>
+</body>
+</html>
